@@ -26,7 +26,7 @@ const formSchema = z.object({
 })
 
 const StoreModal = () => {
-	const { isOpen, onClose, onOpen } = useStoreModal()
+	const { isOpen, onClose } = useStoreModal()
 	const router = useRouter()
 
 	const [loading, setLoading] = useState(false)
@@ -41,9 +41,13 @@ const StoreModal = () => {
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		try {
 			setLoading(true)
-			console.log(values)
 			const response = await axios.post('/api/stores', values)
-			router.push(`/${response.data.id}`)
+
+			// TODO: this isn't closing the modal:: need to analyze, why?
+			// router.push(`/${response.data.id}`)
+			// onClose()
+
+			window.location.assign(`/${response.data.id}`)
 		} catch (error) {
 			console.log(error)
 			toast.error('Something went wrong!')
